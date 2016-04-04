@@ -9,10 +9,6 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   sensor_msgs
   std_msgs
-  tf
-  filters
-  message_filters
-  laser_filters
 )
 
 ## System dependencies are found with CMake's conventions
@@ -121,9 +117,6 @@ catkin_package(
 include_directories(
   ${catkin_INCLUDE_DIRS}
 )
-
-add_executable(laser_listener src/laser_listener.cpp)
-target_link_libraries(laser_listener ${catkin_LIBRARIES})
 
 ## Declare a C++ library
 # add_library(laserscan
