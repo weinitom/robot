@@ -23,8 +23,6 @@ task_targets = {
 "RESPONDING_TO_DEMONSTRATION": {"_/robot_head","_/tablet","_/experimentator"},
  }"""
 
-
-
 current_task = "WAITING_FOR_WORD"
 current_target = "_"
 value = 0.5
@@ -49,7 +47,7 @@ if __name__=='__main__':
     with open(target_list) as target_list_json:
         task_targets = json.load(target_list_json)
 
-    while(True):
+    while not rospy.is_shutdown():
         # get current task:
         rospy.Subscriber("state_activity", String, onChangeTask)
 
@@ -71,6 +69,4 @@ if __name__=='__main__':
         rospy.sleep(1.0)
 
     rospy.spin()
-        
-
 
