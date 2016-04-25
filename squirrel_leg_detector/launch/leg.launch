@@ -1,0 +1,5 @@
+<launch>
+	<param name="model_file" value="$(find squirrel_leg_detector)/ppl2dmdl.C00_stumpboost.param_txt" />
+
+	<node pkg="squirrel_leg_detector" type="leg_detector" output="screen" name="leg_detector" />
+</launch>
