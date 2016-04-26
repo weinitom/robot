@@ -35,7 +35,7 @@ LegDetector::~LegDetector()
 
 void LegDetector::initialise(int argc, char **argv)
 {
-  sw_param_str sw_param; 
+  sw_param_str sw_param;
 
   // load trained person model
   nh_.param<std::string>("model_file", sw_param.modelfile,"MODEL_FILE_NOT_SET");
@@ -43,10 +43,6 @@ void LegDetector::initialise(int argc, char **argv)
   nh_.param("segmentation_distance", sw_param.dseg, 0.2);
   // feature set mix, default 0:all
   nh_.param("feature_mix", sw_param.featuremix, 0);
-
-  nh_.getParam("model_file", str);
-
-ROS_INFO("parameter is '%s'\n",str.c_str());
 
   ppl2D_ = new people2D_engine(sw_param);
   ppl2D_->set_featureset();
@@ -86,7 +82,8 @@ void LegDetector::laserCallback(const sensor_msgs::LaserScan::ConstPtr& laserMsg
   //fclose(dumpfile);//
   //visualiseScan(laserMsg);  // HACK
   ppl2D_->detect_people(scan, people);
-  if(people.size() > 0)
+
+  /*if(people.size() > 0)
   {
     std_msgs::String pos;
     std::stringstream poss;
@@ -95,12 +92,23 @@ void LegDetector::laserCallback(const sensor_msgs::LaserScan::ConstPtr& laserMsg
     poss << center.x << " " << center.y;
     pos.data = poss.str();
     personPub_.publish(pos);
-  }
+  }*/
   for(size_t i = 0; i < people.size(); i++)
   {
+    std_msgs::String pos;//Tom
+    std::stringstream poss;//Tom
+
     LSL_Point3D_str center;
     people[i].compute_cog(&center);
     ROS_INFO("person at %.2f %.2f", center.x, center.y);
+
+    poss << center.x << " " << center.y << "\n";//Tom
+    if(i==people.size()-1)//Tom
+    {
+        pos.data = poss.str();//Tom
+
+        personPub_.publish(pos);//Tom
+    }
   }
   if(people.size() > 0)
     ROS_INFO("--");

@@ -82,7 +82,8 @@ void LegDetector::laserCallback(const sensor_msgs::LaserScan::ConstPtr& laserMsg
   //fclose(dumpfile);//
   //visualiseScan(laserMsg);  // HACK
   ppl2D_->detect_people(scan, people);
-  if(people.size() > 0)
+
+  /*if(people.size() > 0)
   {
     std_msgs::String pos;
     std::stringstream poss;
@@ -91,12 +92,23 @@ void LegDetector::laserCallback(const sensor_msgs::LaserScan::ConstPtr& laserMsg
     poss << center.x << " " << center.y;
     pos.data = poss.str();
     personPub_.publish(pos);
-  }
+  }*/
   for(size_t i = 0; i < people.size(); i++)
   {
+    std_msgs::String pos;//Tom
+    std::stringstream poss;//Tom
+
     LSL_Point3D_str center;
     people[i].compute_cog(&center);
     ROS_INFO("person at %.2f %.2f", center.x, center.y);
+
+    poss << center.x << " " << center.y << "\n";//Tom
+    if(i==people.size()-1)//Tom
+    {
+        pos.data = poss.str();//Tom
+
+        personPub_.publish(pos);//Tom
+    }
   }
   if(people.size() > 0)
     ROS_INFO("--");

@@ -1,0 +1,4 @@
+<launch>
+<node pkg="main" type="algorithm" output="screen" name="algorithm">
+</node>
+</launch>
