@@ -5,7 +5,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE True)
 add_definitions(-std=c++11)
 
 set(DLIB_PATH "" CACHE PATH "Path to DLIB")
-include(/home/thomas/robot/src/attention_tracker/dlib-18.18/dlib/cmake)
+include(~/robot/src/attention_tracker/dlib-18.18/dlib/cmake)
 
 option(DEBUG "Enable debug visualizations" ON)
 option(WITH_TESTS "Compile sample test application" ON)

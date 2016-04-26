@@ -80,7 +80,12 @@ bool isInFieldOfView(const tf::TransformListener& listener, const string& target
 
     double fov_radius_at_x = tan(FOV/2) * transform.getOrigin().x();
 
-    //ROS_INFO_STREAM(target_frame << ": distance_to_main_axis: " << distance_to_main_axis << ", fov_radius_at_x: " << fov_radius_at_x);
+    // ROS_INFO_STREAM(target_frame << ": distance_to_main_axis: " << distance_to_main_axis << ", fov_radius_at_x: " << fov_radius_at_x);
+//if (distance_to_main_axis < fov_radius_at_x) cout << "true" << endl;
+//else cout << "false" << endl;
+//cout << transform.getOrigin().x() << endl;
+//cout << transform.getOrigin().y() << endl;
+//cout << transform.getOrigin().z() << endl;
     if (distance_to_main_axis < fov_radius_at_x) return true;
 
     return false;
@@ -88,8 +93,7 @@ bool isInFieldOfView(const tf::TransformListener& listener, const string& target
 }
 
 int main( int argc, char** argv )
-{std::stringstream ss;
-ss << "hello world " << 1;
+{
     GREEN.r = 0.; GREEN.g = 1.; GREEN.b = 0.; GREEN.a = 1.;
     BLUE.r = 0.; BLUE.g = 0.; BLUE.b = 1.; BLUE.a = 1.;
     RED.r = 1.; RED.g = 0.; RED.b = 0.; RED.a = 1.;
@@ -107,7 +111,7 @@ ss << "hello world " << 1;
     tf::TransformListener listener;
     vector<string> frames;
 
-    vector<string> monitored_frames = {"/robot_head", "/tablet", "/selection_tablet", "/experimenter"};
+    vector<string> monitored_frames = {"/head_tracking_camera"};
 
 
     // Prepare a range sensor msg to represent the fields of view
@@ -144,6 +148,7 @@ ss << "hello world " << 1;
 
     frames.clear();
     listener.getFrameStrings(frames);
+
     int nb_faces = 0;
 
     for(auto frame : frames) {
@@ -154,7 +159,7 @@ ss << "hello world " << 1;
             int face_idx = stoi(frame.substr(HUMAN_FRAME_PREFIX.length(), 1));
 
             if (face_idx == 0) {
-                
+
                 stringstream ss;
                 for(size_t i = 0 ; i < monitored_frames.size(); ++i) {
                     if(isInFieldOfView(listener, monitored_frames[i], frame)) {

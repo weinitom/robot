@@ -1,3 +1,6 @@
+#include <string> // chris
+#include <std_msgs/String.h> // chris
+
 #include "ros_head_pose_estimator.hpp"
 
 using namespace std;
@@ -19,6 +22,7 @@ HeadPoseEstimator::HeadPoseEstimator(ros::NodeHandle& rosNode,
     sub = it.subscribeCamera("image", 1, &HeadPoseEstimator::detectFaces, this);
 
     nb_detected_faces_pub = rosNode.advertise<std_msgs::Char>("nb_detected_faces", 1);
+    face_coordinates_pub = rosNode.advertise<std_msgs::String>("face_pos", 1);
 
 #ifdef HEAD_POSE_ESTIMATION_DEBUG
     pub = it.advertise("attention_tracker/faces/image",1);
@@ -52,17 +56,21 @@ void HeadPoseEstimator::detectFaces(const sensor_msgs::ImageConstPtr& msg,
     inputImage = cv_bridge::toCvShare(msg)->image; 
 
     /********************************************************************
-    *                      Faces detection                           *
+    *                      Faces detection                              *
     ********************************************************************/
 
     estimator.update(inputImage);
 
     auto poses = estimator.poses();
     ROS_INFO_STREAM(poses.size() << " faces detected.");
-
     nb_detected_faces_pub.publish(poses.size());
 
+    string s;
+
     for(size_t face_idx = 0; face_idx < poses.size(); ++face_idx) {
+
+	auto coords = estimator.pose(face_idx); // chris
+	s += "\n" + to_string(double(coords(0,3))) + " " + to_string(double(coords(1,3))) + " " + to_string(double(coords(2,3))); // chris
 
         auto trans = poses[face_idx];
 
@@ -94,6 +102,8 @@ void HeadPoseEstimator::detectFaces(const sensor_msgs::ImageConstPtr& msg,
                                      "face_" + to_string(face_idx)));
 
     }
+
+    face_coordinates_pub.publish(s); // chris
 
 #ifdef HEAD_POSE_ESTIMATION_DEBUG
     if(pub.getNumSubscribers() > 0) {

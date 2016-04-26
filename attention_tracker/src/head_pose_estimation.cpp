@@ -29,7 +29,6 @@ HeadPoseEstimation::HeadPoseEstimation(const string& face_detection_model, float
         // Load face detection and pose estimation models.
         detector = get_frontal_face_detector();
         deserialize(face_detection_model) >> pose_model;
-
 }
 
 

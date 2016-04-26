@@ -69,6 +69,8 @@ public:
     mutable cv::Mat _debug;
 #endif
 
+    cv::Point2f coordsOf(size_t face_idx, FACIAL_FEATURE feature) const; // chris
+
 private:
 
     dlib::cv_image<dlib::bgr_pixel> current_image;
@@ -83,7 +85,7 @@ private:
 
     /** Return the point corresponding to the dictionary marker.
     */
-    cv::Point2f coordsOf(size_t face_idx, FACIAL_FEATURE feature) const;
+    // cv::Point2f coordsOf(size_t face_idx, FACIAL_FEATURE feature) const; // chris
 
     /** Returns true if the lines intersect (and set r to the intersection
      *  coordinates), false otherwise.

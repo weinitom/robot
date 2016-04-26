@@ -245,7 +245,7 @@ namespace gscam {
     }
     ROS_INFO("Started stream.");
 
-    // Poll the data as fast a spossible
+    // Poll the data as fast as possible
     while(ros::ok()) {
       // This should block until a new frame is awake, this way, we'll run at the
       // actual capture framerate of the device.

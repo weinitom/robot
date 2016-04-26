@@ -35,6 +35,7 @@ private:
     image_transport::Publisher pub;
 
     ros::Publisher nb_detected_faces_pub;
+    ros::Publisher face_coordinates_pub; // chris
 
     tf::TransformBroadcaster br;
     tf::Transform transform;
