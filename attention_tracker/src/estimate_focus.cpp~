@@ -81,7 +81,8 @@ bool isInFieldOfView(const tf::TransformListener& listener, const string& target
     double fov_radius_at_x = tan(FOV/2) * transform.getOrigin().x();
 
     // ROS_INFO_STREAM(target_frame << ": distance_to_main_axis: " << distance_to_main_axis << ", fov_radius_at_x: " << fov_radius_at_x);
-//if (distance_to_main_axis < fov_radius_at_x) cout << "true" << endl;
+
+//if (distance_to_main_axis < fov_radius_at_x) cout << "true" << endl; // chris
 //else cout << "false" << endl;
 //cout << transform.getOrigin().x() << endl;
 //cout << transform.getOrigin().y() << endl;
@@ -107,6 +108,7 @@ int main( int argc, char** argv )
     ros::Publisher marker_pub = n.advertise<visualization_msgs::Marker>("estimate_focus", 1);
     ros::Publisher fov_pub = n.advertise<sensor_msgs::Range>("face_0_field_of_view", 1);
     ros::Publisher frames_in_fov_pub = n.advertise<std_msgs::String>("actual_focus_of_attention", 1);
+    ros::Publisher attentive_faces_pub = n.advertise<std_msgs::String>("attentive_faces", 1); // chris
 
     tf::TransformListener listener;
     vector<string> frames;
@@ -146,10 +148,14 @@ int main( int argc, char** argv )
       sleep(1);
     }*/
 
+    tf::TransformListener listener; // chris
+    listener.waitForTransform("base_footprint", "face_0", ros::Time::now(), ros::Duration(0.1)); // chris
+
     frames.clear();
     listener.getFrameStrings(frames);
 
     int nb_faces = 0;
+    string s; // chris
 
     for(auto frame : frames) {
         if(frame.find(HUMAN_FRAME_PREFIX) == 0) {
@@ -158,17 +164,23 @@ int main( int argc, char** argv )
 
             int face_idx = stoi(frame.substr(HUMAN_FRAME_PREFIX.length(), 1));
 
-            if (face_idx == 0) {
+            // if (face_idx == 0) { // chris
 
                 stringstream ss;
                 for(size_t i = 0 ; i < monitored_frames.size(); ++i) {
                     if(isInFieldOfView(listener, monitored_frames[i], frame)) {
                         ROS_DEBUG_STREAM(monitored_frames[i] << " is in the field of view of " << frame);
+			cout << monitored_frames[i] << " is in the field of view of " << frame << endl; // chris
                         marker_pub.publish(makeMarker(i, monitored_frames[i], colors[i]));
                         // create new marker with special color for the observed frame ? 
                         if (ss.str().empty()) ss << "_";
                         ss << monitored_frames[i];
-                        //ss is the frame that the observer is looking
+                        // ss is the frame that the observer is looking
+
+			if(monitored_frames[i] == "/head_tracking_camera") { // chris
+			s += to_string(face_idx) + " "; // chris
+			// s publishes the faces that show attention to the robot (head_tracking_camera) // chris
+			}
                     }
                 }
                 frames_in_fov_pub.publish(ss.str());
@@ -177,9 +189,10 @@ int main( int argc, char** argv )
                 fov.header.stamp = ros::Time::now();
                 fov.header.frame_id = frame;
                 fov_pub.publish(fov); 
-            }
+            // } // chris
         }
     }
+    attentive_faces_pub.publish(s); // chris
     if (nb_faces == 0) {
 
         // hide the field of view
