@@ -1,9 +1,8 @@
 /**
  * algorithm.cpp
  *
- * Reads data from the leg_detector and attention_tracker and decide at which position the robot has to go to get commands.
- * Further a algorithm is implemented to choose a user to mitigate malfunctions.
- *
+ * This is the main algorithm, it gets information from the people_detection where users are located and further 
+ * choose a user to mitigate malfunctions.
  * 
  * @author Thomas Weingartshofer thomas.wein@hotmail.com
  * @date April 2016
@@ -12,25 +11,26 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <algorithm>
 #include <ios>
 #include "std_msgs/String.h"
 #include "ros/ros.h"
+
 #include <main/algorithm.hpp>
+#include <main/people_detection.hpp>
 
-void PeopleDetector::faceCallback(const std_msgs::String::ConstPtr& msg)
+void Algorithm::errorCallback(const std_msgs::String::ConstPtr& msg)
 {
-  ROS_INFO("Faces: [%s]", msg->data.c_str());
+  ROS_ERROR("Error: [%s]", msg->data.c_str());
+
+// To send error message over topic:
+// rostopic pub error std_msgs/String "test"
+
 }
 
-void PeopleDetector::legCallback(const std_msgs::String::ConstPtr& msg)
+Algorithm::Algorithm()
 {
-  ROS_INFO("Legs: [%s]", msg->data.c_str());
-}
-
-PeopleDetector::PeopleDetector()
-{
-  leg_sub = nh.subscribe("laser_person", 100, &PeopleDetector::legCallback,this);
-  face_sub = nh.subscribe("face_pos", 100, &PeopleDetector::faceCallback,this);
+  error_sub = nh.subscribe("error", 100, &Algorithm::errorCallback,this);
 }
 
 int main(int argc, char **argv)
@@ -38,6 +38,7 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "algorithm");
 
   PeopleDetector people;
+  Algorithm alg;
 
   ros::spin();
 

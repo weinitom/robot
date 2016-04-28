@@ -130,7 +130,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(algorithm src/algorithm.cpp)
+add_executable(algorithm src/algorithm.cpp src/people_detection.cpp)
 target_link_libraries(algorithm ${catkin_LIBRARIES})
 
 ## Declare a C++ library

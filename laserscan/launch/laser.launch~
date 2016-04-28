@@ -3,8 +3,6 @@
       <remap from="scan" to="base_scan" />
       <rosparam command="load" file="$(find laserscan)/laser_config.yaml" />
 </node>
-<!-- 
-<node pkg="laserscan" type="laser_listener" output="screen" name="laser_listener">
-</node> 
--->
+<!-- <node pkg="laserscan" type="laser_listener" output="screen" name="laser_listener"> -->
+</node>
 </launch>
