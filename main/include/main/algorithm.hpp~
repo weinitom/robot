@@ -26,6 +26,7 @@ class Algorithm
 {
 public:
   Algorithm();
+  void Normal(void);
 
 private:
   ros::NodeHandle nh;

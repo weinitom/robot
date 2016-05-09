@@ -23,7 +23,7 @@ void Algorithm::errorCallback(const std_msgs::String::ConstPtr& msg)
 {
   ROS_ERROR("Error: [%s]", msg->data.c_str());
 
-// To send error message over topic:
+// To send an error message over topic:
 // rostopic pub error std_msgs/String "test"
 
 }
@@ -31,6 +31,11 @@ void Algorithm::errorCallback(const std_msgs::String::ConstPtr& msg)
 Algorithm::Algorithm()
 {
   error_sub = nh.subscribe("error", 100, &Algorithm::errorCallback,this);
+}
+
+void Algorithm::Normal()
+{
+
 }
 
 int main(int argc, char **argv)

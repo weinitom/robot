@@ -93,14 +93,15 @@ void LegDetector::laserCallback(const sensor_msgs::LaserScan::ConstPtr& laserMsg
     pos.data = poss.str();
     personPub_.publish(pos);
   }*/
+  std::stringstream poss;//Tom
   for(size_t i = 0; i < people.size(); i++)
   {
-    std_msgs::String pos;//Tom
-    std::stringstream poss;//Tom
+  std_msgs::String pos;//Tom
+
 
     LSL_Point3D_str center;
     people[i].compute_cog(&center);
-    ROS_INFO("person at %.2f %.2f", center.x, center.y);
+    //ROS_INFO("person at %.2f %.2f", center.x, center.y);
 
     poss << center.x << " " << center.y << "\n";//Tom
     if(i==people.size()-1)//Tom
@@ -111,7 +112,8 @@ void LegDetector::laserCallback(const sensor_msgs::LaserScan::ConstPtr& laserMsg
     }
   }
   if(people.size() > 0)
-    ROS_INFO("--");
+    //ROS_INFO("--");
+
   for(size_t i = 0; i < people.size(); i++)
     visualisePerson(people[i]);
 }

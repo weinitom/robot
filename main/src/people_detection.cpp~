@@ -1,9 +1,7 @@
 /**
  * people_detection.cpp
  *
- * Reads data from the leg_detector and attention_tracker and decide at which position the robot has to go to get commands.
- * Further a algorithm is implemented to choose a user to mitigate malfunctions.
- *
+ * Reads data from the leg_detector and attention_tracker and detect the position of the users.
  * 
  * @author Thomas Weingartshofer thomas.wein@hotmail.com
  * @date April 2016
@@ -66,7 +64,42 @@ void PeopleDetector::faceCallback(const std_msgs::String::ConstPtr& msg)
 
 void PeopleDetector::legCallback(const std_msgs::String::ConstPtr& msg)
 {
-  ROS_INFO("Legs: [%s]", msg->data.c_str());
+  const char* str = msg->data.c_str();
+
+  int i=0;
+  int count=1;
+  int index=0;
+
+  //ROS_INFO("Legs: [%s]", msg->data.c_str());
+
+  for (i = 0; i < strlen(str); i++)
+  {
+      if (str[i] == '\n' || count==1)
+      {
+         if(i==0)
+         {
+            leg_pos[index].x = atof(&str[i]);
+         }
+         else if(index<10)
+         {
+            leg_pos[index].x = atof(&str[i+1]);
+         }
+         count=2;
+         continue;
+      }
+      if (str[i] == ' ' && count==2)
+      {
+         leg_pos[index].y = atof(&str[i+1]);
+         count=1;
+         index++;
+         continue;
+      }
+  }  
+
+  for (i = 0; i < index; i++)
+  {
+  	ROS_INFO("Legs %d: [x=%f y=%f]",i+1,leg_pos[i].x,leg_pos[i].y);
+  }
 }
 
 void PeopleDetector::attentionCallback(const std_msgs::String::ConstPtr& msg)
