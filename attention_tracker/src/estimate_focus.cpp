@@ -83,10 +83,11 @@ bool isInFieldOfView(const tf::TransformListener& listener, const string& target
     // ROS_INFO_STREAM(target_frame << ": distance_to_main_axis: " << distance_to_main_axis << ", fov_radius_at_x: " << fov_radius_at_x);
 
 //if (distance_to_main_axis < fov_radius_at_x) cout << "true" << endl; // chris
-//else cout << "false" << endl;
-//cout << transform.getOrigin().x() << endl;
-//cout << transform.getOrigin().y() << endl;
-//cout << transform.getOrigin().z() << endl;
+//else cout << "false" << endl; // chris
+//cout << transform.getOrigin().x()*1000 << endl; // chris
+//cout << transform.getOrigin().y()*1000 << endl; // chris
+//cout << transform.getOrigin().z()*1000 << endl; // chris
+
     if (distance_to_main_axis < fov_radius_at_x) return true;
 
     return false;
@@ -149,7 +150,7 @@ int main( int argc, char** argv )
     }*/
 
     tf::TransformListener listener; // chris
-    listener.waitForTransform("base_footprint", "face_0", ros::Time::now(), ros::Duration(0.1)); // chris
+    listener.waitForTransform("base_footprint", "face_0", ros::Time::now(), ros::Duration(0.5)); // chris
 
     frames.clear();
     listener.getFrameStrings(frames);
@@ -170,9 +171,9 @@ int main( int argc, char** argv )
                 for(size_t i = 0 ; i < monitored_frames.size(); ++i) {
                     if(isInFieldOfView(listener, monitored_frames[i], frame)) {
                         ROS_DEBUG_STREAM(monitored_frames[i] << " is in the field of view of " << frame);
-			cout << monitored_frames[i] << " is in the field of view of " << frame << endl; // chris
+			// cout << monitored_frames[i] << " is in the field of view of " << frame << endl; // chris
                         marker_pub.publish(makeMarker(i, monitored_frames[i], colors[i]));
-                        // create new marker with special color for the observed frame ? 
+                        // create new marker with special color for the observed frame ?
                         if (ss.str().empty()) ss << "_";
                         ss << monitored_frames[i];
                         // ss is the frame that the observer is looking

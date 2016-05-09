@@ -52,7 +52,9 @@ To test the library, run:
 
 ```text
 ./head_pose_test ../share/shape_predictor_68_face_landmarks.dat
+# in attention tracker
 ./head_pose_test ./share/shape_predictor_68_face_landmarks.dat # added by nijw
+./head_pose_single_frame ./share/shape_predictor_68_face_landmarks.dat ./doc/test.jpg # added by nijw
 ```
 
 You should get something very similar to the picture above.
