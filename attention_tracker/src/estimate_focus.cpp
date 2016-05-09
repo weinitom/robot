@@ -82,12 +82,6 @@ bool isInFieldOfView(const tf::TransformListener& listener, const string& target
 
     // ROS_INFO_STREAM(target_frame << ": distance_to_main_axis: " << distance_to_main_axis << ", fov_radius_at_x: " << fov_radius_at_x);
 
-//if (distance_to_main_axis < fov_radius_at_x) cout << "true" << endl; // chris
-//else cout << "false" << endl; // chris
-//cout << transform.getOrigin().x()*1000 << endl; // chris
-//cout << transform.getOrigin().y()*1000 << endl; // chris
-//cout << transform.getOrigin().z()*1000 << endl; // chris
-
     if (distance_to_main_axis < fov_radius_at_x) return true;
 
     return false;
@@ -114,8 +108,9 @@ int main( int argc, char** argv )
     tf::TransformListener listener;
     vector<string> frames;
 
-    vector<string> monitored_frames = {"/head_tracking_camera"};
-
+    vector<string> monitored_frames; // chris
+    n.getParam("mf", monitored_frames); // chris
+    // vector<string> monitored_frames = {"/head_tracking_camera"}; // chris
 
     // Prepare a range sensor msg to represent the fields of view
     // (cone for visualization)
