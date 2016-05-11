@@ -29,6 +29,9 @@ class PeopleDetector
 {
 public:
   PeopleDetector();
+  void detectUsers(void);
+  coordinates getUserCoordinates(int index);
+  coordinates getClosestUser(void);
 
 private:
   ros::NodeHandle nh;
@@ -39,6 +42,8 @@ private:
   coordinates face_pos[10];
   coordinates leg_pos[10];
   coordinates attention_pos[10];
+
+  coordinates users[10];
 
   void legCallback(const std_msgs::String::ConstPtr& msg);
   void faceCallback(const std_msgs::String::ConstPtr& msg);

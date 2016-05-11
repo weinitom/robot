@@ -17,6 +17,7 @@
 #include <algorithm>
 #include <ios>
 #include "std_msgs/String.h"
+#include "std_msgs/Int32.h"
 #include "ros/ros.h"
 
 #include <main/algorithm.hpp>
@@ -26,14 +27,23 @@ class Algorithm
 {
 public:
   Algorithm();
-  void Normal(void);
+  void Normal(coordinates home,coordinates pointA, coordinates pointB);
+  void Error(PeopleDetector people, double timethreshold, coordinates pointA, coordinates pointB);
+  char returnStatus(void);
 
 private:
   ros::NodeHandle nh;
-  ros::Subscriber error_sub;
+  ros::Subscriber command_sub;
+  ros::Publisher goal_pub;
+  ros::Subscriber reachedgoal_sub;
 
+  char status;
+  char statusbefore;
 
-  void errorCallback(const std_msgs::String::ConstPtr& msg);
+  double timelastcmd;
+
+  void commandCallback(const std_msgs::String::ConstPtr& msg);
+  void reachedGoalCallback(const std_msgs::Int32::ConstPtr& msg);
 };
 
 #endif

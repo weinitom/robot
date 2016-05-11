@@ -93,11 +93,12 @@ void LegDetector::laserCallback(const sensor_msgs::LaserScan::ConstPtr& laserMsg
     pos.data = poss.str();
     personPub_.publish(pos);
   }*/
+
   std::stringstream poss;//Tom
+
   for(size_t i = 0; i < people.size(); i++)
   {
-  std_msgs::String pos;//Tom
-
+    std_msgs::String pos;//Tom
 
     LSL_Point3D_str center;
     people[i].compute_cog(&center);

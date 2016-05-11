@@ -20,12 +20,14 @@
 
 void PeopleDetector::faceCallback(const std_msgs::String::ConstPtr& msg)
 {
-  const char* str = msg->data.c_str();
+  const char* str = msg->data.c_str();	// define shortcut
 
+  // define variables
   int i=0;
   int count=1;
   int index=0;
 
+  // read out face coordinates (x y z) from string (0.000000 0.000000 0.000000\n0.000000 0.000000 0.000000\n...)
   for (i = 0; i < strlen(str); i++)
   {
       if (str[i] == '\n' || count==1)
@@ -55,7 +57,8 @@ void PeopleDetector::faceCallback(const std_msgs::String::ConstPtr& msg)
          continue;
       } 
   }
-  //ROS_INFO("Faces: [%s]",str);
+  
+  // show read out coordinates
   for (i = 0; i < index; i++)
   {
      ROS_INFO("Face %d: [x=%f y=%f z=%f]",i+1,face_pos[i].x,face_pos[i].y,face_pos[i].z);
@@ -64,14 +67,14 @@ void PeopleDetector::faceCallback(const std_msgs::String::ConstPtr& msg)
 
 void PeopleDetector::legCallback(const std_msgs::String::ConstPtr& msg)
 {
-  const char* str = msg->data.c_str();
+  const char* str = msg->data.c_str();	// define shortcut
 
+  // define variables
   int i=0;
   int count=1;
   int index=0;
 
-  //ROS_INFO("Legs: [%s]", msg->data.c_str());
-
+  // read out leg coordinates (x y) from string (0.000000 0.000000\n0.000000 0.000000\n...)
   for (i = 0; i < strlen(str); i++)
   {
       if (str[i] == '\n' || count==1)
@@ -96,6 +99,7 @@ void PeopleDetector::legCallback(const std_msgs::String::ConstPtr& msg)
       }
   }  
 
+  // show read out coordinates
   for (i = 0; i < index; i++)
   {
   	ROS_INFO("Legs %d: [x=%f y=%f]",i+1,leg_pos[i].x,leg_pos[i].y);
@@ -104,11 +108,29 @@ void PeopleDetector::legCallback(const std_msgs::String::ConstPtr& msg)
 
 void PeopleDetector::attentionCallback(const std_msgs::String::ConstPtr& msg)
 {
+  // listen to attention tracker
   ROS_INFO("Attention: [%s]", msg->data.c_str());
+}
+
+void PeopleDetector::detectUsers(void)
+{
+   // TO-DO
+}
+
+coordinates PeopleDetector::getUserCoordinates(int index)
+{
+   return users[index];   // return private coordinates from user
+}
+
+coordinates PeopleDetector::getClosestUser(void)
+{
+   //TO-DO
+   return users[0];
 }
 
 PeopleDetector::PeopleDetector()
 {
+  // initialize subscribers
   leg_sub = nh.subscribe("laser_person", 100, &PeopleDetector::legCallback,this);
   face_sub = nh.subscribe("face_pos", 100, &PeopleDetector::faceCallback,this);
   attention_sub = nh.subscribe("attentive_faces", 100, &PeopleDetector::attentionCallback,this);
