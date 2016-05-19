@@ -9,6 +9,8 @@
 #include <std_msgs/String.h>
 #include <tf/transform_listener.h>
 
+#include <std_msgs/Float64.h> // chris
+
 using namespace std;
 
 static const string HUMAN_FRAME_PREFIX = "face_";
@@ -104,6 +106,8 @@ int main( int argc, char** argv )
     ros::Publisher fov_pub = n.advertise<sensor_msgs::Range>("face_0_field_of_view", 1);
     ros::Publisher frames_in_fov_pub = n.advertise<std_msgs::String>("actual_focus_of_attention", 1);
     ros::Publisher attentive_faces_pub = n.advertise<std_msgs::String>("attentive_faces", 1); // chris
+    ros::Publisher pan_controller_pub = n.advertise<std_msgs::Float64>("pan_controller/state", 1); // chris
+    ros::Publisher tilt_controller_pub = n.advertise<std_msgs::Float64>("tilt_controller/state", 1); // chris
 
     tf::TransformListener listener;
     vector<string> frames;
@@ -121,6 +125,12 @@ int main( int argc, char** argv )
     fov.min_range = 0;
     fov.max_range = 10;
     fov.range = RANGE;
+
+    ros::Duration(1).sleep(); // sleep for a second
+
+    // initialize kinects pan and tilt state
+    pan_controller_pub.publish(-0.7); // chris
+    tilt_controller_pub.publish(-0.5); // chris
 
   ROS_INFO("Waiting until a face becomes visible...");
   while (!listener.waitForTransform("base_footprint", "face_0", ros::Time::now(), ros::Duration(5.0))) {
@@ -163,7 +173,7 @@ int main( int argc, char** argv )
             // if (face_idx == 0) { // chris
 
                 stringstream ss;
-                for(size_t i = 0 ; i < monitored_frames.size(); ++i) {cout << monitored_frames[i] << endl;
+                for(size_t i = 0 ; i < monitored_frames.size(); ++i) {
                     if(isInFieldOfView(listener, monitored_frames[i], frame)) {
                         ROS_DEBUG_STREAM(monitored_frames[i] << " is in the field of view of " << frame);
 			// cout << monitored_frames[i] << " is in the field of view of " << frame << endl; // chris
@@ -173,9 +183,9 @@ int main( int argc, char** argv )
                         ss << monitored_frames[i];
                         // ss is the frame that the observer is looking
 
-			if(monitored_frames[i] == "/head_tracking_camera") { // chris
+			if(monitored_frames[i] == "/kinect_frame") { // chris
 			s += to_string(face_idx) + " "; // chris
-			// s publishes the faces that show attention to the robot (head_tracking_camera) // chris
+			// s publishes the faces that show attention to the robot (kinect_frame) // chris
 			}
                     }
                 }

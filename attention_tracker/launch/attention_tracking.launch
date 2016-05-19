@@ -1,6 +1,6 @@
 <launch>
 
-  <arg name="head_tracking_frame" default="head_tracking_camera"/>
+  <arg name="head_tracking_frame" default="kinect_frame"/>
 
   <arg name="device" default="/dev/video0"/>
   <arg name="calibration" default="package://gscam/examples/uncalibrated_parameters.ini"/>
@@ -14,18 +14,11 @@
   </node>
 
   <node name="base_footprint_transform" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /map /base_footprint 100"/>
-  <node name="camera_transform" pkg="tf" type="static_transform_publisher" args="0.1 0 0 1.57 0 1. /base_footprint $(arg head_tracking_frame) 100"/>
 
-  <node name="kinect_transform" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /base_footprint /kinect_frame 100"/>
+  <node name="kinect_transform" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /base_footprint $(arg head_tracking_frame) 100"/>
   <node name="any_transform" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /base_footprint /any_frame 100"/>
 
   <rosparam param="mf">["/kinect_frame", "/any_frame"]</rosparam>
-
-
-
-
-
-
 
   <node pkg="attention_tracker" type="estimate_focus" name="estimate_focus" output="screen"/>
 
