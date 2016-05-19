@@ -9,6 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   roslib
   std_msgs
+  geometry_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -132,8 +133,6 @@ include_directories(
 
 add_executable(algorithm src/algorithm.cpp src/people_detection.cpp)
 target_link_libraries(algorithm ${catkin_LIBRARIES})
-#add_executable(people_detection src/people_detection.cpp)
-#target_link_libraries(people_detection ${catkin_LIBRARIES})
 
 ## Declare a C++ library
 # add_library(main

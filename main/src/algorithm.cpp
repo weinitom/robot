@@ -76,7 +76,7 @@ void Algorithm::reachedGoalCallback(const std_msgs::Int32::ConstPtr& msg)
        }
        else if(status=='e')  // if robot reaches user to mitigate malfunction
        {
-
+	    // sorted users and indizes are stored, decide if attention is given and then go to nomal behaviour or to next closest user
        }
 }
 
@@ -87,6 +87,9 @@ Algorithm::Algorithm()
 
     goal_pub = nh.advertise<std_msgs::String>("goal", 1);
     reachedgoal_sub = nh.subscribe("goal_reached", 1, &Algorithm::reachedGoalCallback,this);
+
+    for(int i=0;i<USERS;i++)
+	index_sorted[i]=-1;
 }
 
 void Algorithm::Normal(coordinates home, coordinates pointA, coordinates pointB)
@@ -124,21 +127,21 @@ char Algorithm::returnStatus(void)
    return status;	   // return private variable status
 }
 
-void Algorithm::Error(PeopleDetector people, double timethreshold, coordinates pointA, coordinates pointB)
+void Algorithm::Error(PeopleDetector people, double timeerror, double timethreshold, coordinates pointA, coordinates pointB)
 {
    // initialize variables
    std_msgs::String msg;
    std::stringstream ss;
    coordinates current;
+   int size=0;
 
    people.detectUsers();	// detect users
-
-   double timenow = ros::Time::now().toSec();	// save time at last command
+   size=people.getUserSize();   // get size of users
 
    // check if users are available 
-   if((people.getUserCoordinates(0).x!=0 || people.getUserCoordinates(0).y!=0 || people.getUserCoordinates(0).z!=0) && (statusbefore=='a' || statusbefore=='b'))
+   if(size!=0 && (statusbefore=='a' || statusbefore=='b'))
    {
-      if(timenow-timelastcmd<timethreshold)	// check if time since last command is lower than threshold
+      if(timeerror-timelastcmd<timethreshold)	// check if time since last command is lower than threshold
       {
          // write coordinates from last waypoint to drive to
          switch(statusbefore)
@@ -156,7 +159,16 @@ void Algorithm::Error(PeopleDetector people, double timethreshold, coordinates p
       }
       else
       {
-         current=people.getClosestUser();	// write coordinates from closest user
+        people.getClosestUsers(&index_sorted[0]);	// write sorted indizes from users
+       	// get User Coordinates
+  	for(int i=0;i<size;i++)
+  	{
+		users_sorted[i]=people.getUserCoordinates(index_sorted[i]);
+   	}
+
+   	// choose closest user
+   	choosen_user=0;
+   	current=people.getUserCoordinates(index_sorted[choosen_user]);
       }
    }
 
@@ -188,21 +200,26 @@ int main(int argc, char **argv)
   pointB.x=-10;
   pointB.y=-10;
 
-  // define time threshold in seconds
+  // define time threshold and time when error occur
   double timethreshold = 10;
+  double timeerror = 0;
 
-  //ros::Rate loop_rate(1);
-  //loop_rate.sleep();
+  // define range for leg - and face data to compare to find users
+  people.setRange(0.2);
 
   while(ros::ok())
   {
      // decide between normal mode and error mode
      if(alg.returnStatus()=='e')
      {
-         alg.Error(people,timethreshold,pointA,pointB);
+         if(timeerror==0)
+	 {
+         	timeerror = ros::Time::now().toSec();			// save time at error
+         	alg.Error(people,timeerror,timethreshold,pointA,pointB);// decide which user is the best to help
+	 }
      }
      else
-     {  
+     {   timeerror = 0;
          alg.Normal(home,pointA,pointB);
      }
 

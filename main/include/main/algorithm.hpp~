@@ -28,7 +28,7 @@ class Algorithm
 public:
   Algorithm();
   void Normal(coordinates home,coordinates pointA, coordinates pointB);
-  void Error(PeopleDetector people, double timethreshold, coordinates pointA, coordinates pointB);
+  void Error(PeopleDetector people, double timeerror, double timethreshold, coordinates pointA, coordinates pointB);
   char returnStatus(void);
 
 private:
@@ -41,6 +41,10 @@ private:
   char statusbefore;
 
   double timelastcmd;
+
+  coordinates users_sorted[USERS];
+  int index_sorted[USERS];
+  int choosen_user;
 
   void commandCallback(const std_msgs::String::ConstPtr& msg);
   void reachedGoalCallback(const std_msgs::Int32::ConstPtr& msg);

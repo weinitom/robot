@@ -17,9 +17,12 @@
 #include <ios>
 #include "std_msgs/String.h"
 #include "ros/ros.h"
+#include <tf/transform_listener.h>
 
 #include <main/algorithm.hpp>
 #include <main/people_detection.hpp>
+
+#define USERS 10
 
 struct coordinates{
   double x,y,z;
@@ -31,7 +34,10 @@ public:
   PeopleDetector();
   void detectUsers(void);
   coordinates getUserCoordinates(int index);
-  coordinates getClosestUser(void);
+  void getClosestUser(int *index_sorted);
+  void setRange(double range);
+  int getAttention(int index);
+  int getUserSize(void);
 
 private:
   ros::NodeHandle nh;
@@ -39,11 +45,17 @@ private:
   ros::Subscriber face_sub;
   ros::Subscriber attention_sub;
 
-  coordinates face_pos[10];
-  coordinates leg_pos[10];
-  coordinates attention_pos[10];
+  ros::Publisher face_pose;
+  ros::Publisher attention_pose;
+  ros::Publisher leg_pose;
 
-  coordinates users[10];
+  coordinates face_pos[USERS];
+  coordinates leg_pos[USERS];
+  int attention_pos[USERS];
+
+  coordinates users[USERS];
+
+  double range;
 
   void legCallback(const std_msgs::String::ConstPtr& msg);
   void faceCallback(const std_msgs::String::ConstPtr& msg);

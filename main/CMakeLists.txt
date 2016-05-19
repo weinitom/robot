@@ -9,6 +9,8 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   roslib
   std_msgs
+  geometry_msgs
+  tf
 )
 
 ## System dependencies are found with CMake's conventions
