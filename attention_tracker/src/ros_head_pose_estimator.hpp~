@@ -25,7 +25,7 @@ class HeadPoseEstimator
 public:
 
     HeadPoseEstimator(ros::NodeHandle& rosNode,
-                      const std::string& modelFilename = "");
+                      const std::string& modelFilename = "", const std::string& mode = ""); // chris
 
 private:
 

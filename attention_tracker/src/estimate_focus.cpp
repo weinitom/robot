@@ -126,14 +126,14 @@ int main( int argc, char** argv )
     fov.max_range = 10;
     fov.range = RANGE;
 
-    ros::Duration(1).sleep(); // sleep for a second
+    ros::Duration(1).sleep(); // sleep for a second // chris
 
     // initialize kinects pan and tilt state
     pan_controller_pub.publish(-0.7); // chris
     tilt_controller_pub.publish(-0.5); // chris
 
   ROS_INFO("Waiting until a face becomes visible...");
-  while (!listener.waitForTransform("base_footprint", "face_0", ros::Time::now(), ros::Duration(5.0))) {
+  while (ros::ok() && !listener.waitForTransform("base_footprint", "face_0", ros::Time::now(), ros::Duration(5.0))) {
         ROS_DEBUG("Still no face visible...");
         r.sleep();
   }

@@ -12,14 +12,19 @@ using namespace cv;
 #define TRANSFORM_FUTURE_DATING 0
 
 HeadPoseEstimator::HeadPoseEstimator(ros::NodeHandle& rosNode,
-                                     const string& modelFilename) :
+                                     const string& modelFilename, const string& mode) :
             rosNode(rosNode),
             it(rosNode),
             warnUncalibratedImage(true),
             estimator(modelFilename)
 
 {
-    sub = it.subscribeCamera("image", 1, &HeadPoseEstimator::detectFaces, this);
+    if(mode == "camera") // chris
+        sub = it.subscribeCamera("image", 1, &HeadPoseEstimator::detectFaces, this);
+    else if(mode == "rosbag")
+        sub = it.subscribeCamera("/kinect/rgb/image_raw", 1, &HeadPoseEstimator::detectFaces, this);
+    else
+        ROS_WARN("NO MODE SET -> NO IMAGE DATA");    
 
     nb_detected_faces_pub = rosNode.advertise<std_msgs::Char>("nb_detected_faces", 1);
     face_coordinates_pub = rosNode.advertise<std_msgs::String>("face_pos", 1);
@@ -65,7 +70,7 @@ void HeadPoseEstimator::detectFaces(const sensor_msgs::ImageConstPtr& msg,
     //ROS_INFO_STREAM(poses.size() << " faces detected.");
     nb_detected_faces_pub.publish(poses.size());
 
-    string s;
+    string s; // chris
 
     for(size_t face_idx = 0; face_idx < poses.size(); ++face_idx) {
 

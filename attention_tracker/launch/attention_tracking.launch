@@ -1,6 +1,6 @@
 <launch>
 
-  <arg name="head_tracking_frame" default="kinect_frame"/>
+  <arg name="head_tracking_frame" default="kinect_link"/>
 
   <arg name="device" default="/dev/video0"/>
   <arg name="calibration" default="package://gscam/examples/uncalibrated_parameters.ini"/>
@@ -18,17 +18,14 @@
   <node name="kinect_transform" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /base_footprint $(arg head_tracking_frame) 100"/>
   <node name="any_transform" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /base_footprint /any_frame 100"/>
 
-  <rosparam param="mf">["/kinect_frame", "/any_frame"]</rosparam>
+  <rosparam param="mf">["/kinect_link", "/any_frame"]</rosparam>
 
   <node pkg="attention_tracker" type="estimate_focus" name="estimate_focus" output="screen"/>
 
   <node pkg="attention_tracker" type="estimate" name="head_pose_estimation" output="screen">
+    <param name="mode" value="camera" />
     <param name="face_model" value="$(find attention_tracker)/share/shape_predictor_68_face_landmarks.dat" />
     <remap from="/image" to="/camera/image_raw"/>
-  </node>
-
-  <node pkg="attention_tracker" type="withmeness.py" name="withmeness" output="screen">
-      <param name="targets" value="$(find attention_tracker)/share/targets.json"/>
   </node>
 
 </launch>
