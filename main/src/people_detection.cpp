@@ -20,7 +20,7 @@
 #include <main/algorithm.hpp>
 #include <main/people_detection.hpp>
 
-#define TRANSFORM 0
+#define TRANSFORM 1
 
 void PeopleDetector::faceCallback(const std_msgs::String::ConstPtr& msg)
 {
@@ -62,6 +62,8 @@ void PeopleDetector::faceCallback(const std_msgs::String::ConstPtr& msg)
       } 
   }
 
+  ros::Time time=ros::Time::now();
+
   // generate and transform PoseStamped Message
   for (i = 0; i < index; i++)
   {
@@ -73,10 +75,8 @@ void PeopleDetector::faceCallback(const std_msgs::String::ConstPtr& msg)
      msg.pose.position.z=face_pos[i].z;
      msg.pose.orientation.w=1;
 
-
-     msg.header.frame_id="kinect_frame";
-     ros::Time time=ros::Time::now();
-     msg.header.stamp.sec=time.sec+2;
+     msg.header.frame_id="kinect_link";
+     msg.header.stamp.sec=time.sec;
      msg.header.stamp.nsec=time.nsec;
 
      // generate new transformed PoseStamped Message
@@ -86,12 +86,12 @@ void PeopleDetector::faceCallback(const std_msgs::String::ConstPtr& msg)
      #if TRANSFORM
      // Transform PoseStamped Message in map frame
      tf::TransformListener listener;
-     while (!listener.waitForTransform("kinect_frame", "base_footprint", ros::Time::now(), ros::Duration(5.0))) {
-        ROS_DEBUG("Transformation not ready yet");
+     while (ros::ok() && !facelistener->waitForTransform("kinect_link", "base_footprint", ros::Time::now(), ros::Duration(5.0))) {
+        ROS_ERROR("Face-Transformation not ready yet");
         ros::Duration(1).sleep();
      }
      try{
-      listener.transformPose("base_footprint", msg, msg_trans);
+      facelistener->transformPose("base_footprint", msg, msg_trans);
      }
      catch (tf::TransformException &ex) {
       ROS_ERROR("%s",ex.what());
@@ -146,6 +146,8 @@ void PeopleDetector::legCallback(const std_msgs::String::ConstPtr& msg)
       }
   }  
 
+  ros::Time time=ros::Time::now();
+
   // generate and transform PoseStamped Message
   for (i = 0; i < index; i++)
   {
@@ -157,9 +159,8 @@ void PeopleDetector::legCallback(const std_msgs::String::ConstPtr& msg)
      msg.pose.position.z=0;
      msg.pose.orientation.w=1;
 
-     msg.header.frame_id="kinect_frame";
-     ros::Time time=ros::Time::now();
-     msg.header.stamp.sec=time.sec+2;
+     msg.header.frame_id="kinect_link";
+     msg.header.stamp.sec=time.sec;
      msg.header.stamp.nsec=time.nsec;
 
      // generate new transformed PoseStamped Message
@@ -168,13 +169,12 @@ void PeopleDetector::legCallback(const std_msgs::String::ConstPtr& msg)
  
      #if TRANSFORM
      // Transform PoseStamped Message in map frame
-     tf::TransformListener listener;
-     while (!listener.waitForTransform("kinect_frame", "base_footprint", ros::Time::now(), ros::Duration(5.0))) {
-        ROS_DEBUG("Transformation not ready yet");
+     while (ros::ok() && !leglistener->waitForTransform("kinect_link", "base_footprint", ros::Time::now(), ros::Duration(5.0))) {
+        ROS_ERROR("Leg-Transformation not ready yet");
         ros::Duration(1).sleep();
      }
      try{
-      listener.transformPose("base_footprint", msg, msg_trans);
+      leglistener->transformPose("base_footprint", msg, msg_trans);
      }
      catch (tf::TransformException &ex) {
       ROS_ERROR("%s",ex.what());
@@ -333,6 +333,10 @@ PeopleDetector::PeopleDetector()
   leg_pose = nh.advertise<geometry_msgs::PoseStamped>("leg_pose", 10);
   attention_pose = nh.advertise<geometry_msgs::PoseStamped>("attention_pose", 10);
   face_pose = nh.advertise<geometry_msgs::PoseStamped>("face_pose", 10);
+
+  // initialize listener
+  leglistener = new tf::TransformListener();
+  facelistener = new tf::TransformListener();
 
   // initialize variables
   coordinates init;

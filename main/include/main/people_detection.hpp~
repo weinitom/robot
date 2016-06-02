@@ -34,7 +34,7 @@ public:
   PeopleDetector();
   void detectUsers(void);
   coordinates getUserCoordinates(int index);
-  void getClosestUser(int *index_sorted);
+  void getClosestUsers(int *index_sorted);
   void setRange(double range);
   int getAttention(int index);
   int getUserSize(void);
@@ -48,6 +48,9 @@ private:
   ros::Publisher face_pose;
   ros::Publisher attention_pose;
   ros::Publisher leg_pose;
+
+  tf::TransformListener *leglistener;
+  tf::TransformListener *facelistener;
 
   coordinates face_pos[USERS];
   coordinates leg_pos[USERS];

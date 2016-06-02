@@ -49,6 +49,9 @@ private:
   ros::Publisher attention_pose;
   ros::Publisher leg_pose;
 
+  tf::TransformListener *leglistener;
+  tf::TransformListener *facelistener;
+
   coordinates face_pos[USERS];
   coordinates leg_pos[USERS];
   int attention_pos[USERS];

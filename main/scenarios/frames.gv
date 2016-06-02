@@ -1,10 +1,24 @@
 digraph G {
-"map" -> "base_footprint"[label="Broadcaster: /base_footprint_transform\nAverage rate: 10.150 Hz\nMost recent transform: 1463665008.029 ( -0.066 sec old)\nBuffer length: 4.926 sec\n"];
-"base_footprint" -> "kinect_frame"[label="Broadcaster: /kinect_transform\nAverage rate: 10.149 Hz\nMost recent transform: 1463665008.039 ( -0.076 sec old)\nBuffer length: 4.927 sec\n"];
-"kinect_frame" -> "face_0"[label="Broadcaster: /head_pose_estimation\nAverage rate: 12.482 Hz\nMost recent transform: 1463665007.904 ( 0.058 sec old)\nBuffer length: 4.887 sec\n"];
-"base_footprint" -> "any_frame"[label="Broadcaster: /any_transform\nAverage rate: 10.134 Hz\nMost recent transform: 1463665007.976 ( -0.013 sec old)\nBuffer length: 4.835 sec\n"];
+"odom" -> "odomp"[label="Broadcaster: /rosbag\nAverage rate: 20.270 Hz\nMost recent transform: 1463487066.630 ( 0.044 sec old)\nBuffer length: 4.933 sec\n"];
+"odomp" -> "base_link"[label="Broadcaster: /rosbag\nAverage rate: 20.270 Hz\nMost recent transform: 1463487066.630 ( 0.044 sec old)\nBuffer length: 4.933 sec\n"];
+"kinect_link" -> "kinect_rgb_frame"[label="Broadcaster: /rosbag\nAverage rate: 10.188 Hz\nMost recent transform: 1463487066.712 ( -0.038 sec old)\nBuffer length: 4.908 sec\n"];
+"tilt_link" -> "kinect_link"[label="Broadcaster: /rosbag\nAverage rate: 5.217 Hz\nMost recent transform: 1463487066.475 ( 0.199 sec old)\nBuffer length: 4.600 sec\n"];
+"kinect_depth_frame" -> "kinect_depth_optical_frame"[label="Broadcaster: /rosbag\nAverage rate: 10.192 Hz\nMost recent transform: 1463487066.714 ( -0.039 sec old)\nBuffer length: 4.906 sec\n"];
+"kinect_link" -> "kinect_depth_frame"[label="Broadcaster: /rosbag\nAverage rate: 10.185 Hz\nMost recent transform: 1463487066.765 ( -0.091 sec old)\nBuffer length: 4.909 sec\n"];
+"kinect_rgb_frame" -> "kinect_rgb_optical_frame"[label="Broadcaster: /rosbag\nAverage rate: 10.191 Hz\nMost recent transform: 1463487066.734 ( -0.060 sec old)\nBuffer length: 4.906 sec\n"];
+"base_link" -> "wheel0_link"[label="Broadcaster: /rosbag\nAverage rate: 4.726 Hz\nMost recent transform: 1463487066.625 ( 0.049 sec old)\nBuffer length: 4.867 sec\n"];
+"base_link" -> "wheel1_link"[label="Broadcaster: /rosbag\nAverage rate: 4.726 Hz\nMost recent transform: 1463487066.625 ( 0.049 sec old)\nBuffer length: 4.867 sec\n"];
+"base_link" -> "wheel2_link"[label="Broadcaster: /rosbag\nAverage rate: 4.726 Hz\nMost recent transform: 1463487066.625 ( 0.049 sec old)\nBuffer length: 4.867 sec\n"];
+"odom" -> "base_footprint"[label="Broadcaster: /base_footprint_transform\nAverage rate: 9.628 Hz\nMost recent transform: 1463487066.774 ( -0.100 sec old)\nBuffer length: 4.881 sec\n"];
+"base_footprint" -> "any_frame"[label="Broadcaster: /any_transform\nAverage rate: 9.628 Hz\nMost recent transform: 1463487066.774 ( -0.100 sec old)\nBuffer length: 4.881 sec\n"];
+"base_pan_link" -> "pan_link"[label="Broadcaster: /rosbag\nAverage rate: 4.584 Hz\nMost recent transform: 1463487066.596 ( 0.078 sec old)\nBuffer length: 4.800 sec\n"];
+"profile_link" -> "base_pan_link"[label="Broadcaster: /rosbag\nAverage rate: 5.217 Hz\nMost recent transform: 1463487066.475 ( 0.199 sec old)\nBuffer length: 4.600 sec\n"];
+"base_link" -> "profile_link"[label="Broadcaster: /rosbag\nAverage rate: 5.217 Hz\nMost recent transform: 1463487066.475 ( 0.199 sec old)\nBuffer length: 4.600 sec\n"];
+"base_link" -> "hokuyo_link"[label="Broadcaster: /rosbag\nAverage rate: 5.217 Hz\nMost recent transform: 1463487066.475 ( 0.199 sec old)\nBuffer length: 4.600 sec\n"];
+"pan_link" -> "tilt_link"[label="Broadcaster: /rosbag\nAverage rate: 4.565 Hz\nMost recent transform: 1463487066.497 ( 0.177 sec old)\nBuffer length: 4.600 sec\n"];
+"kinect_rgb_optical_frame" -> "face_0"[label="Broadcaster: /head_pose_estimation\nAverage rate: 2.275 Hz\nMost recent transform: 1463487066.616 ( 0.058 sec old)\nBuffer length: 3.516 sec\n"];
 edge [style=invis];
  subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
-"Recorded at time: 1463665007.962"[ shape=plaintext ] ;
- }->"map";
+"Recorded at time: 1463487066.674"[ shape=plaintext ] ;
+ }->"odom";
 }
