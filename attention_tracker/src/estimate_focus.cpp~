@@ -183,7 +183,7 @@ int main( int argc, char** argv )
                         ss << monitored_frames[i];
                         // ss is the frame that the observer is looking
 
-			if(monitored_frames[i] == "/kinect_frame") { // chris
+			if(monitored_frames[i] == "/kinect_link") { // chris
 			s += to_string(face_idx) + " "; // chris
 			// s publishes the faces that show attention to the robot (kinect_frame) // chris
 			}
