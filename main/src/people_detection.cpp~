@@ -21,6 +21,7 @@
 #include <main/people_detection.hpp>
 
 #define TRANSFORM 1
+#define OUTPUT 0
 
 void PeopleDetector::faceCallback(const std_msgs::String::ConstPtr& msg)
 {
@@ -62,7 +63,7 @@ void PeopleDetector::faceCallback(const std_msgs::String::ConstPtr& msg)
       } 
   }
 
-  ros::Time time=ros::Time::now();
+  ros::Time time=ros::Time::now();		// save current time
 
   // generate and transform PoseStamped Message
   for (i = 0; i < index; i++)
@@ -102,12 +103,16 @@ void PeopleDetector::faceCallback(const std_msgs::String::ConstPtr& msg)
      msg_trans=msg;
      #endif
 
+     // publish transformed PoseStamped Message
      face_pose.publish(msg_trans);
      face_pos[i].x=msg_trans.pose.position.x;
      face_pos[i].y=msg_trans.pose.position.y;
      face_pos[i].z=msg_trans.pose.position.z;
 
+     // show face positions
+     #if OUTPUT
      ROS_INFO("Face %d: [x=%f y=%f z=%f]",i+1,face_pos[i].x,face_pos[i].y,face_pos[i].z);
+     #endif
   }
 
 }
@@ -146,7 +151,7 @@ void PeopleDetector::legCallback(const std_msgs::String::ConstPtr& msg)
       }
   }  
 
-  ros::Time time=ros::Time::now();
+  ros::Time time=ros::Time::now();		// save current time
 
   // generate and transform PoseStamped Message
   for (i = 0; i < index; i++)
@@ -185,14 +190,17 @@ void PeopleDetector::legCallback(const std_msgs::String::ConstPtr& msg)
      msg_trans=msg;
      #endif
 
+     // publish transformed PoseStamped Message
      leg_pose.publish(msg_trans);
      leg_pos[i].x=msg_trans.pose.position.x;
      leg_pos[i].y=msg_trans.pose.position.y;
      leg_pos[i].z=0;
 
+     // show leg positions
+     #if OUTPUT
      ROS_INFO("Legs %d: [x=%f y=%f]",i+1,leg_pos[i].x,leg_pos[i].y);
+     #endif
   }
-
 
 }
 
@@ -226,18 +234,22 @@ void PeopleDetector::attentionCallback(const std_msgs::String::ConstPtr& msg)
   }  
 
   // listen to attention tracker (1...attention is given, 0...no attention)
+  #if OUTPUT
   ROS_INFO("Attention: [%d %d %d %d %d]", attention_pos[0],attention_pos[1],attention_pos[2],attention_pos[3],attention_pos[4]);
+  #endif
 }
 
 int PeopleDetector::getAttention(int index)
 {
-	return attention_pos[index];
+	return attention_pos[index];	// return private variable
 }
 
 void PeopleDetector::detectUsers(void)
 {
+   // initialize variable
    int i,j;
    
+   // iterate through all leg- and face positions to find users, if the data is on top of each other
    for(i=0;i<USERS;i++)
    {
       for(j=0;j<USERS;j++)
@@ -252,8 +264,10 @@ void PeopleDetector::detectUsers(void)
 
 int PeopleDetector::getUserSize()
 {
+   // initialize variable
     int size=0;
 
+    // iterate through all users, if users are found
     for(int i=0;i<USERS;i++)
     {
 	if(users[i].x!=0 && users[i].y!=0)
@@ -264,6 +278,7 @@ int PeopleDetector::getUserSize()
 
 void PeopleDetector::getClosestUsers(int *index_sorted)
 {
+    // initialize variables
     int i,j;
     int newn;
     int size=0;
@@ -274,8 +289,6 @@ void PeopleDetector::getClosestUsers(int *index_sorted)
     // help variables for bubble sort
     double helplength;
     int helpindex;
-
-    // !!! Transformation to base_link from robot is neceassary before !!!
 
     // size of users
     size=getUserSize();
@@ -295,6 +308,7 @@ void PeopleDetector::getClosestUsers(int *index_sorted)
       {
           if(length[i] > length[i+1])
 	  {
+		// swap data with help variable
           	helplength=length[i];
           	helpindex=*(index_sorted+i);
 

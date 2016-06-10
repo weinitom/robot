@@ -27,8 +27,10 @@ class Algorithm
 {
 public:
   Algorithm();
-  void Normal(coordinates home,coordinates pointA, coordinates pointB);
-  void Error(PeopleDetector people, double timeerror, double timethreshold, coordinates pointA, coordinates pointB);
+  void Normal(void);
+  void Error(double timeerror, double timethreshold);
+  void setRange(double setrange);
+  void setPoints(coordinates sethome, coordinates setPointA, coordinates setpointB);
   char returnStatus(void);
 
 private:
@@ -41,6 +43,12 @@ private:
   char statusbefore;
 
   double timelastcmd;
+
+  PeopleDetector *people;
+
+  coordinates home;
+  coordinates pointA;
+  coordinates pointB;
 
   coordinates users_sorted[USERS];
   int index_sorted[USERS];
