@@ -94,9 +94,9 @@ void HeadPoseEstimator::detectFaces(const sensor_msgs::ImageConstPtr& msg,
 
         tf::Quaternion qrot;
         tf::Matrix3x3 mrot(
-                trans(0,0), trans(0,1), trans(0,2),
-                trans(1,0), trans(1,1), trans(1,2),
-                trans(2,0), trans(2,1), trans(2,2));
+                trans(0,0), -trans(0,1), -trans(0,2),
+                trans(1,0), -trans(1,1), -trans(1,2),
+                trans(2,0), -trans(2,1), -trans(2,2)); // chris // - turns the coordinates by 180° about the x-axis
         mrot.getRotation(qrot);
         face_pose.setRotation(qrot);
 

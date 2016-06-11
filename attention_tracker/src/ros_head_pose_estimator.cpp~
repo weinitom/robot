@@ -9,7 +9,7 @@ using namespace cv;
 // how many second in the *future* the face transformation should be published?
 // this allow to compensate for the 'slowness' of face detection, but introduce
 // some lag in TF.
-#define TRANSFORM_FUTURE_DATING -1
+#define TRANSFORM_FUTURE_DATING 0
 
 HeadPoseEstimator::HeadPoseEstimator(ros::NodeHandle& rosNode,
                                      const string& modelFilename, const string& mode) :
@@ -94,9 +94,9 @@ void HeadPoseEstimator::detectFaces(const sensor_msgs::ImageConstPtr& msg,
 
         tf::Quaternion qrot;
         tf::Matrix3x3 mrot(
-                trans(0,0), trans(0,1), trans(0,2),
-                trans(1,0), trans(1,1), trans(1,2),
-                trans(2,0), trans(2,1), trans(2,2));
+                trans(0,0), -trans(0,1), -trans(0,2),
+                trans(1,0), -trans(1,1), -trans(1,2),
+                trans(2,0), -trans(2,1), -trans(2,2));
         mrot.getRotation(qrot);
         face_pose.setRotation(qrot);
 
