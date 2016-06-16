@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>squirrel_leg_detector</name>
+  <name>leg_detector</name>
   <version>1.0.0</version>
   <description>The squirrel leg detector package, implemeting laser leg detection by Luciano Spinello</description>
 

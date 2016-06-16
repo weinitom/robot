@@ -1,6 +1,7 @@
 <launch>
 
-  <node pkg="rosbag" type="play" name="rosbag" output="screen" args="$(find main)/scenarios/robot_vision_2_complete.bag"/>
+  <param name="/use_sim_time" value="true"/>
+  <node pkg="rosbag" type="play" name="rosbag" output="screen" args="--clock $(find main)/scenarios/robot_vision_2_complete.bag"/>
 
   <include file="$(find laserscan)/launch/laser.launch"/>
   <include file="$(find squirrel_leg_detector)/launch/leg.launch"/>
@@ -8,7 +9,7 @@
 
   <arg name="head_tracking_frame" default="kinect_link"/>
 
-  <node name="base_footprint_transform" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /map /base_footprint 100"/>
+  <node name="base_footprint_transform" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /odom /base_footprint 100"/>
 
   <node name="any_transform" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /base_footprint /any_frame 100"/>
 

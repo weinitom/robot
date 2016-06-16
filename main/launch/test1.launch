@@ -4,7 +4,7 @@
   <node pkg="rosbag" type="play" name="rosbag" output="screen" args="--clock $(find main)/scenarios/robot_vision_1_complete.bag"/>
 
   <include file="$(find laserscan)/launch/laser.launch"/>
-  <include file="$(find squirrel_leg_detector)/launch/leg.launch"/>
+  <include file="$(find leg_detector)/launch/leg.launch"/>
   <include file="$(find main)/launch/main.launch"/>
 
   <arg name="head_tracking_frame" default="kinect_link"/>

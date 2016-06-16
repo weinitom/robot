@@ -21,7 +21,7 @@
 #include <ios>
 #include <std_msgs/String.h>
 #include <visualization_msgs/Marker.h>
-#include <squirrel_leg_detector/leg_detector.h> 
+#include <leg_detector/leg_detector.h> 
 
 LegDetector::LegDetector()
 {
@@ -193,7 +193,7 @@ void LegDetector::visualisePerson(LSL_Point3D_container &person)
 
 int main(int argc, char ** argv)
 {
-  ros::init(argc, argv, "squirrel_leg_detector_node");
+  ros::init(argc, argv, "leg_detector_node");
   LegDetector ld;
   ld.initialise(argc, argv);
   ld.run();

@@ -1,6 +1,6 @@
 <launch>
 <include file="$(find laserscan)/launch/laser.launch"/>
-<include file="$(find squirrel_leg_detector)/launch/leg.launch"/>
+<include file="$(find leg_detector)/launch/leg.launch"/>
 <include file="$(find main)/launch/main.launch"/>
 <include file="$(find attention_tracker)/launch/attention_tracking.launch"/>
 

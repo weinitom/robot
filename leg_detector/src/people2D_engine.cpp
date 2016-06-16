@@ -20,7 +20,7 @@
 
 
 
-#include <squirrel_leg_detector/people2D_engine.hpp>
+#include <leg_detector/people2D_engine.hpp>
 
 
 void people2D_engine::predict(std::vector < std::vector <Real> > descriptor, std::vector <Real> &label_out)

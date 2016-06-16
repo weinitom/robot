@@ -20,7 +20,7 @@
 
 #include <ros/ros.h>
 #include <sensor_msgs/LaserScan.h>
-#include <squirrel_leg_detector/people2D_engine.hpp>
+#include <leg_detector/people2D_engine.hpp>
 
 class LegDetector
 {
