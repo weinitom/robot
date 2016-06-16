@@ -13,10 +13,10 @@
     <param name="sync_sink" value="true"/>
   </node>
 
-  <node name="base_footprint_transform" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /map /base_footprint 100"/>
+  <node name="base_footprint_transform" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /map /base_link 100"/>
 
-  <node name="kinect_transform" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /base_footprint $(arg head_tracking_frame) 100"/>
-  <node name="any_transform" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /base_footprint /any_frame 100"/>
+  <node name="kinect_transform" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /base_link $(arg head_tracking_frame) 100"/>
+  <node name="any_transform" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /base_link /any_frame 100"/>
 
   <rosparam param="mf">["/kinect_link", "/any_frame"]</rosparam>
 

@@ -106,8 +106,8 @@ int main( int argc, char** argv )
     ros::Publisher fov_pub = n.advertise<sensor_msgs::Range>("face_0_field_of_view", 1);
     ros::Publisher frames_in_fov_pub = n.advertise<std_msgs::String>("actual_focus_of_attention", 1);
     ros::Publisher attentive_faces_pub = n.advertise<std_msgs::String>("attentive_faces", 1); // chris
-    //ros::Publisher pan_controller_pub = n.advertise<std_msgs::Float64>("pan_controller/state", 1); // chris
-    //ros::Publisher tilt_controller_pub = n.advertise<std_msgs::Float64>("tilt_controller/state", 1); // chris
+    //ros::Publisher pan_controller_pub = n.advertise<std_msgs::Float64>("pan_controller/command", 1); // chris
+    //ros::Publisher tilt_controller_pub = n.advertise<std_msgs::Float64>("tilt_controller/command", 1); // chris
 
     tf::TransformListener listener;
     vector<string> frames;
@@ -129,11 +129,11 @@ int main( int argc, char** argv )
     ros::Duration(1).sleep(); // sleep for a second // chris
 
     // initialize kinects pan and tilt state
-    //pan_controller_pub.publish(-0.7); // chris
-    //tilt_controller_pub.publish(-0.5); // chris
+    //pan_controller_pub.publish(0); // chris
+    //tilt_controller_pub.publish(0); // chris
 
   ROS_INFO("Waiting until a face becomes visible...");
-  while (ros::ok() && !listener.waitForTransform("base_footprint", "face_0", ros::Time::now(), ros::Duration(5.0))) {
+  while (ros::ok() && !listener.waitForTransform("base_link", "face_0", ros::Time::now(), ros::Duration(5.0))) {
         ROS_DEBUG("Still no face visible...");
         r.sleep();
   }
@@ -155,7 +155,7 @@ int main( int argc, char** argv )
     }*/
 
     tf::TransformListener listener; // chris
-    listener.waitForTransform("base_footprint", "face_0", ros::Time::now(), ros::Duration(0.5)); // chris
+    listener.waitForTransform("base_link", "face_0", ros::Time::now(), ros::Duration(0.5)); // chris
 
     frames.clear();
     listener.getFrameStrings(frames);

@@ -21,7 +21,7 @@
 #include <main/people_detection.hpp>
 
 #define TRANSFORM 1
-#define OUTPUT 0
+#define OUTPUT 1
 
 void PeopleDetector::faceCallback(const std_msgs::String::ConstPtr& msg)
 {
@@ -87,12 +87,12 @@ void PeopleDetector::faceCallback(const std_msgs::String::ConstPtr& msg)
      #if TRANSFORM
      // Transform PoseStamped Message in map frame
      tf::TransformListener listener;
-     while (ros::ok() && !facelistener->waitForTransform("kinect_link", "base_footprint", ros::Time::now(), ros::Duration(5.0))) {
+     while (ros::ok() && !facelistener->waitForTransform("kinect_link", "base_link", ros::Time::now(), ros::Duration(5.0))) {
         ROS_ERROR("Face-Transformation not ready yet");
         ros::Duration(1).sleep();
      }
      try{
-      facelistener->transformPose("base_footprint", msg, msg_trans);
+      facelistener->transformPose("base_link", msg, msg_trans);
      }
      catch (tf::TransformException &ex) {
       ROS_ERROR("%s",ex.what());
@@ -174,12 +174,12 @@ void PeopleDetector::legCallback(const std_msgs::String::ConstPtr& msg)
  
      #if TRANSFORM
      // Transform PoseStamped Message in map frame
-     while (ros::ok() && !leglistener->waitForTransform("kinect_link", "base_footprint", ros::Time::now(), ros::Duration(5.0))) {
+     while (ros::ok() && !leglistener->waitForTransform("kinect_link", "base_link", ros::Time::now(), ros::Duration(5.0))) {
         ROS_ERROR("Leg-Transformation not ready yet");
         ros::Duration(1).sleep();
      }
      try{
-      leglistener->transformPose("base_footprint", msg, msg_trans);
+      leglistener->transformPose("base_link", msg, msg_trans);
      }
      catch (tf::TransformException &ex) {
       ROS_ERROR("%s",ex.what());
