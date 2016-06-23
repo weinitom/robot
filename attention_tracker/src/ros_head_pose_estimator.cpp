@@ -76,7 +76,7 @@ void HeadPoseEstimator::detectFaces(const sensor_msgs::ImageConstPtr& msg,
 
 	auto coords = estimator.pose(face_idx); // chris
 	//s += to_string(double(coords(0,3))) + " " + to_string(double(coords(1,3))) + " " + to_string(double(coords(2,3))) + "\n"; // chris
-	s += to_string(-double(coords(2,3))) + " " + to_string(double(coords(1,3))) + " " + to_string(double(coords(0,3))) + "\n"; // chris
+	s += to_string(-double(coords(2,3))) + " " + to_string(double(coords(0,3))) + " " + to_string(double(coords(1,3))) + "\n"; // chris
 
         auto trans = poses[face_idx];
 

@@ -21,7 +21,7 @@
 #include <main/algorithm.hpp>
 #include <main/people_detection.hpp>
 
-#define SEARCH_USER 10
+#define SEARCH_USER 30
 
 void Algorithm::commandCallback(const std_msgs::String::ConstPtr& msg)
 {
@@ -198,8 +198,9 @@ void Algorithm::Error(double timeerror, double timethreshold)
    // search for users until timeout is over or user is found
    while(size==0 && ros::Time::now() - start_time < timeout && ros::ok())
    {
-   	people->detectUsers();	     // detect users
-   	size=people->getUserSize();      // get size of users
+   	people->detectUsers();	        // detect users
+   	size=people->getUserSize();     // get size of users
+        ros::spinOnce();		// listen to callbacks
    }
 
    if(timeerror-timelastcmd<timethreshold && (statusbefore=='a' || statusbefore=='b'))   // check if time since last command is lower than threshold
@@ -289,7 +290,7 @@ int main(int argc, char **argv)
   double timeerror = 0;
 
   // define range for leg - and face data to compare to find users
-  alg.setRange(0.2);
+  alg.setRange(0.3);
 
   while(ros::ok())
   {

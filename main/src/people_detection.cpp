@@ -254,12 +254,13 @@ void PeopleDetector::detectUsers(void)
    {
       for(j=0;j<USERS;j++)
       {
-   	if(face_pos[i].x+range>leg_pos[j].x && face_pos[i].x-range<leg_pos[j].x && face_pos[i].y+range>leg_pos[j].y && face_pos[i].y+range>leg_pos[j].y)
+   	if(face_pos[i].x+range>leg_pos[j].x && face_pos[i].x-range<leg_pos[j].x && face_pos[i].y+range>leg_pos[j].y && face_pos[i].y+range>leg_pos[j].y && face_pos[i].x!=0 && face_pos[i].y!=0 && leg_pos[j].x!=0 && leg_pos[j].y!=0)
+	{
    		users[i].x=leg_pos[j].x;
 		users[i].y=leg_pos[j].y;
+	}
       }
    }
-
 }
 
 int PeopleDetector::getUserSize()
