@@ -185,7 +185,7 @@ head_pose HeadPoseEstimation::pose(size_t face_idx) const
     line(_debug, projected_axes[0], projected_axes[2], Scalar(0,255,0),2,CV_AA);
     line(_debug, projected_axes[0], projected_axes[1], Scalar(0,0,255),2,CV_AA);
 
-    putText(_debug, "face_" + to_string(face_idx) + "(" + to_string(int(pose(0,3) * 100)) + "cm, " + to_string(int(pose(1,3) * 100)) + "cm, " + to_string(int(pose(2,3) * 100)) + "cm)", coordsOf(face_idx, SELLION), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0,0,255),2); // chris
+    putText(_debug, "face_" + to_string(face_idx) + "(" + to_string(int(pose(0,3) * 100)) + "cm, " + to_string(int(pose(1,3) * 100)) + "cm, " + to_string(int(-pose(2,3) * 100)) + "cm)", coordsOf(face_idx, SELLION), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0,0,255),2); // chris
 
 
 #endif

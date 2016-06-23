@@ -75,7 +75,8 @@ void HeadPoseEstimator::detectFaces(const sensor_msgs::ImageConstPtr& msg,
     for(size_t face_idx = 0; face_idx < poses.size(); ++face_idx) {
 
 	auto coords = estimator.pose(face_idx); // chris
-	s += to_string(double(coords(0,3))) + " " + to_string(double(coords(1,3))) + " " + to_string(double(coords(2,3))) + "\n"; // chris
+	//s += to_string(double(coords(0,3))) + " " + to_string(double(coords(1,3))) + " " + to_string(double(coords(2,3))) + "\n"; // chris
+	s += to_string(-double(coords(2,3))) + " " + to_string(double(coords(1,3))) + " " + to_string(double(coords(0,3))) + "\n"; // chris
 
         auto trans = poses[face_idx];
 
@@ -88,8 +89,8 @@ void HeadPoseEstimator::detectFaces(const sensor_msgs::ImageConstPtr& msg,
 
         if (z < 0) continue; // the head can not be *behind* the camera!
 
-        face_pose.setOrigin( tf::Vector3( trans(0,3),
-                                          trans(1,3),
+        face_pose.setOrigin( tf::Vector3( -trans(0,3),
+                                          -trans(1,3),
                                           z) );
 
         tf::Quaternion qrot;
